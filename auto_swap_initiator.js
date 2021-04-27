@@ -1,6 +1,5 @@
 var swappers = [
-    "regnaston", "issamnsr", "pateldax", "iamoliverneil", "darthmushy", "fortinmaxime836", "ottawaidcold", "cryptomeinhof", "wijdan", "auth100448", "blackdogs", "flo33","shyzence","goofer"
-];
+    "domi167"];
 var wallet = null;
 
 var walletResponse = await fetch("https://api.shakepay.com/wallets", { "headers": {"accept": "application/json","accept-language": "en-US,en;q=0.9,fr;q=0.8","authorization": window.sessionStorage.getItem("feathers-jwt"),"cache-control": "no-cache","content-type": "application/json","pragma": "no-cache","sec-ch-ua": "\" Not A;Brand\";v=\"99\", \"Chromium\";v=\"90\", \"Microsoft Edge\";v=\"90\"","sec-ch-ua-mobile": "?0","sec-fetch-dest": "empty","sec-fetch-mode": "cors","sec-fetch-site": "same-site"},"referrerPolicy": "same-origin","body": null,"method": "GET","mode": "cors","credentials": "include"});
