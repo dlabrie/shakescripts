@@ -61,7 +61,8 @@ while (pullMore === true) {
 var balance = 0;
 for(let swapper in swapperBalance) {
     balance = swapperBalance[swapper].toFixed(2);
-    if(balance<=0) continue;
+    if(balance<=4.95) continue;
+    if(balance<5) balance=5;
     if(balance < wallet.balance) {
         if(balance >= 1 && balance <= 20) {
             if(confirm("Send $"+balance+" to "+swapper)) {
