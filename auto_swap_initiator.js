@@ -1,5 +1,5 @@
 var swappers = [
-    "domi167"
+    "regnaston", "issamnsr", "pateldax", "iamoliverneil", "darthmushy", "fortinmaxime836", "ottawaidcold", "cryptomeinhof", "wijdan", "auth100448", "blackdogs", "flo33","shyzence","goofer"
 ];
 var wallet = null;
 
@@ -78,7 +78,7 @@ for(let i in swappers) {
         break;
     }
     if(confirm("Send $5 to "+swapper)) {
-        wallet.balance -= balance;
+        wallet.balance -= 5;
         console.log("Sending $5 to "+swapper)
         var sendMoneyResponse = await fetch("https://api.shakepay.com/transactions", {
             "headers": {
