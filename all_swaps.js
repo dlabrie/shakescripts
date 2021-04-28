@@ -1,5 +1,6 @@
 var pullMore = true;
 var swapperBalance = [];
+var swapperTransactions = [];
 var page = 1;
 
 while (pullMore === true) {
@@ -32,15 +33,20 @@ while (pullMore === true) {
             var swapper = t.from.label.replace("@","");
             if(typeof swapperBalance[swapper] === 'undefined') {
                 swapperBalance[swapper]=0;
+                swapperTransactions[swapper]=[];
             }
             swapperBalance[swapper]=parseFloat(swapperBalance[swapper])+parseFloat(t.amount);
+            swapperTransactions[swapper].push(t);
         }
         if(t.direction=="debit") {
             var swapper = t.to.label.replace("@","");
             if(typeof swapperBalance[swapper] === 'undefined') {
                 swapperBalance[swapper]=0;
+                swapperTransactions[swapper]=[];
             } 
             swapperBalance[swapper]=parseFloat(swapperBalance[swapper])-parseFloat(t.amount);
+            swapperTransactions[swapper].push(t);    
+            
         }
     }
     page++;
@@ -49,6 +55,6 @@ while (pullMore === true) {
 var strPrint = "";
 for (let i in swapperBalance) {
     if(swapperBalance[i] < -1 || swapperBalance[i] > 1)
-        strPrint += i + " \t " + swapperBalance[i]+"\n";
+        strPrint += i + " \t " + swapperBalance[i].toFixed(2) +"\n";
 }
 console.log(strPrint);

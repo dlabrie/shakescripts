@@ -81,7 +81,7 @@ for(let swapper in swapperBalance) {
                       "sec-fetch-site": "same-site"
                     },
                     "referrerPolicy": "same-origin",
-                    "body": "{\"amount\": \""+balance+"\",\"fromWallet\": \""+wallet.id+"\",\"note\": \"🏓💎🙌  quick swaps by domi167\",\"to\": \""+swapper+"\",\"toType\": \"user\"}",
+                    "body": "{\"amount\": \""+balance+"\",\"fromWallet\": \""+wallet.id+"\",\"note\": \"🏓💎🙌  swap completed by domi167\",\"to\": \""+swapper+"\",\"toType\": \"user\"}",
                     "method": "POST",
                     "mode": "cors",
                     "credentials": "include"
