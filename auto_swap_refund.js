@@ -11,6 +11,7 @@ for (let i in wallets.data) {
 
 var pullMore = true;
 var swapperBalance = [];
+var swapperTransactions = [];
 var page = 1;
 
 while (pullMore === true) {
@@ -43,29 +44,48 @@ while (pullMore === true) {
             var swapper = t.from.label.replace("@","");
             if(typeof swapperBalance[swapper] === 'undefined') {
                 swapperBalance[swapper]=0;
+                swapperTransactions[swapper]=[];
             }
             swapperBalance[swapper]=parseFloat(swapperBalance[swapper])+parseFloat(t.amount);
+            swapperTransactions[swapper].push(t);            
         }
         if(t.direction=="debit") {
             var swapper = t.to.label.replace("@","");
             if(typeof swapperBalance[swapper] === 'undefined') {
                 swapperBalance[swapper]=0;
+                swapperTransactions[swapper]=[];
             } 
             swapperBalance[swapper]=parseFloat(swapperBalance[swapper])-parseFloat(t.amount);
+            swapperTransactions[swapper].push(t);            
         }
     }
     page++;
 }
 
+var strPrint = "";
+strPrint += "---------- You owe the following people ----------\n";
+for (let i in swapperBalance) {
+    if(swapperBalance[i] > 1) {
+        strPrint += "" + swapperTransactions[i][0].createdAt + " for $"+swapperTransactions[i][0].amount+" ("+swapperTransactions[i][0].direction+") | " + i + " | " + swapperBalance[i].toFixed(2) + "\n";
+    }
+}
+console.log(strPrint);
+
+
+
 //  
 var balance = 0;
 for(let swapper in swapperBalance) {
     balance = swapperBalance[swapper].toFixed(2);
-    if(balance<=4.95) continue;
-    if(balance<5) balance=5;
+    if(balance<4.70) continue;
+    if(balance<5) {
+        console.log("Adjusted the balance for "+swapper+" from $"+balance+" to $5");
+        balance=5;
+    }
     if(balance < wallet.balance) {
-        if(balance >= 1 && balance <= 20) {
-            if(confirm("Send $"+balance+" to "+swapper)) {
+        if(balance >= 4.70 && balance <= 5) {
+            console.log("Send $"+balance+" to "+swapper+"?");
+            if(confirm("Send $"+balance+" to "+swapper+"?")) {
                 wallet.balance -= balance;
                 console.log("Sending $"+balance+" to "+swapper)
                 var sendMoneyResponse = await fetch("https://api.shakepay.com/transactions", {
@@ -81,7 +101,7 @@ for(let swapper in swapperBalance) {
                       "sec-fetch-site": "same-site"
                     },
                     "referrerPolicy": "same-origin",
-                    "body": "{\"amount\": \""+balance+"\",\"fromWallet\": \""+wallet.id+"\",\"note\": \"🏓💎🙌  swap completed by domi167\",\"to\": \""+swapper+"\",\"toType\": \"user\"}",
+                    "body": "{\"amount\": \""+balance+"\",\"fromWallet\": \""+wallet.id+"\",\"note\": \"Thanks for the swap\",\"to\": \""+swapper+"\",\"toType\": \"user\"}",
                     "method": "POST",
                     "mode": "cors",
                     "credentials": "include"
@@ -92,7 +112,7 @@ for(let swapper in swapperBalance) {
                 console.log("Did not send $"+balance+" to "+swapper);
             }
         } else {
-            console.log("Ignoring swap with "+swapper+" since it's outside of range ("+balance+")");
+            console.log("Ignoring balance with "+swapper+" since it's outside of range ("+balance+")");
         }
     } else {
         console.log("You don't have the funds to return $"+balance+" to "+swapper);
