@@ -53,8 +53,16 @@ while (pullMore === true) {
 }
 
 var strPrint = "";
+strPrint += "---------- You owe the following people ----------\n";
 for (let i in swapperBalance) {
-    if(swapperBalance[i] < -1 || swapperBalance[i] > 1)
-        strPrint += i + " \t " + swapperBalance[i].toFixed(2) +"\n";
+    if(swapperBalance[i] > 1) {
+        strPrint += "" + swapperTransactions[i][0].createdAt + " for $"+swapperTransactions[i][0].amount+" ("+swapperTransactions[i][0].direction+") | " + i + " | " + swapperBalance[i].toFixed(2) + "\n";
+    }
+}
+strPrint += "\n---------- The following people owe you ----------\n";
+for (let i in swapperBalance) {
+    if(swapperBalance[i] < -1) {
+        strPrint += "" + swapperTransactions[i][0].createdAt + " for $"+swapperTransactions[i][0].amount+" ("+swapperTransactions[i][0].direction+") | " + i + " | " + swapperBalance[i].toFixed(2) + "\n";
+    }
 }
 console.log(strPrint);
