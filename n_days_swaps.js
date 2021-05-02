@@ -32,10 +32,7 @@ while (pullMore === true) {
         if(t.currency!="CAD") continue;
 
         createdAt = parseInt(Date.parse(t.createdAt));
-        if(createdAt < endTime.getTime()) {
-            console.log("Skipping "+t.createdAt);
-            continue;
-        }
+        if(createdAt > endTime.getTime()) continue;
 
         if(createdAt < startTime.getTime()) {
             console.log("No more transactions to process");
