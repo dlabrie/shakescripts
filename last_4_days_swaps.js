@@ -7,6 +7,7 @@ var startTime = new Date(midnightStart.getTime() - msOffset - 1000*3600*24*4) ;
 
 var pullMore = true;
 var swapperBalance = [];
+var transactionCatalog = [];
 var page = 1;
 
 while (pullMore === true) {
@@ -23,6 +24,9 @@ while (pullMore === true) {
 
     for (var i = 0; i < transactions.length; i++) {
         var t = transactions[i];                
+
+        if(typeof transactionCatalog[t.transactionId] != 'undefined') continue;
+        transactionCatalog[t.transactionId] = 1;        
 
         if(t.type!="peer") continue;
         if(t.currency!="CAD") continue;

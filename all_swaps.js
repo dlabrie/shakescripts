@@ -1,6 +1,7 @@
 var pullMore = true;
 var swapperBalance = [];
 var swapperTransactions = [];
+var transactionCatalog = [];
 var page = 1;
 
 while (pullMore === true) {
@@ -16,7 +17,10 @@ while (pullMore === true) {
     }
 
     for (var i = 0; i < transactions.length; i++) {
-        var t = transactions[i];                
+        var t = transactions[i];
+
+        if(typeof transactionCatalog[t.transactionId] != 'undefined') continue;
+        transactionCatalog[t.transactionId] = 1;            
 
         if(t.type!="peer") continue;
         if(t.currency!="CAD") continue;
@@ -45,16 +49,17 @@ while (pullMore === true) {
                 swapperTransactions[swapper]=[];
             } 
             swapperBalance[swapper]=parseFloat(swapperBalance[swapper])-parseFloat(t.amount);
-            swapperTransactions[swapper].push(t);    
-            
+            swapperTransactions[swapper].push(t);            
         }
     }
     page++;
 }
 
 var strPrint = "";
+var tierCounter = 0;
 strPrint += "---------- You owe the following people ----------\n";
 for (let i in swapperBalance) {
+    tierCounter++;
     if(swapperBalance[i] > 1) {
         strPrint += "" + swapperTransactions[i][0].createdAt + " for $"+swapperTransactions[i][0].amount+" ("+swapperTransactions[i][0].direction+") | " + i + " | " + swapperBalance[i].toFixed(2) + "\n";
     }
@@ -65,4 +70,6 @@ for (let i in swapperBalance) {
         strPrint += "" + swapperTransactions[i][0].createdAt + " for $"+swapperTransactions[i][0].amount+" ("+swapperTransactions[i][0].direction+") | " + i + " | " + swapperBalance[i].toFixed(2) + "\n";
     }
 }
+
+strPrint+="\n\nSo far you have swapped with "+tierCounter+" different Shakepay friends 🚀"
 console.log(strPrint);

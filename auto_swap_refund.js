@@ -12,6 +12,7 @@ for (let i in wallets.data) {
 var pullMore = true;
 var swapperBalance = [];
 var swapperTransactions = [];
+var transactionCatalog = [];
 var page = 1;
 
 while (pullMore === true) {
@@ -28,6 +29,9 @@ while (pullMore === true) {
 
     for (var i = 0; i < transactions.length; i++) {
         var t = transactions[i];                
+
+        if(typeof transactionCatalog[t.transactionId] != 'undefined') continue;
+        transactionCatalog[t.transactionId] = 1;            
 
         if(t.type!="peer") continue;
         if(t.currency!="CAD") continue;
@@ -77,13 +81,13 @@ console.log(strPrint);
 var balance = 0;
 for(let swapper in swapperBalance) {
     balance = swapperBalance[swapper].toFixed(2);
-    if(balance<4.70) continue;
+    if(balance<4.75) continue;
     if(balance<5) {
         console.log("Adjusted the balance for "+swapper+" from $"+balance+" to $5");
         balance=5;
     }
     if(balance < wallet.balance) {
-        if(balance >= 4.70 && balance <= 5) {
+        if(balance >= 4.75 && balance <= 5) {
             console.log("Send $"+balance+" to "+swapper+"?");
             if(confirm("Send $"+balance+" to "+swapper+"?")) {
                 wallet.balance -= balance;
@@ -101,7 +105,7 @@ for(let swapper in swapperBalance) {
                       "sec-fetch-site": "same-site"
                     },
                     "referrerPolicy": "same-origin",
-                    "body": "{\"amount\": \""+balance+"\",\"fromWallet\": \""+wallet.id+"\",\"note\": \"Thanks for the swap\",\"to\": \""+swapper+"\",\"toType\": \"user\"}",
+                    "body": "{\"amount\": \""+balance+"\",\"fromWallet\": \""+wallet.id+"\",\"note\": \"Thanks for the swap 😘\",\"to\": \""+swapper+"\",\"toType\": \"user\"}",
                     "method": "POST",
                     "mode": "cors",
                     "credentials": "include"
