@@ -1,6 +1,7 @@
 var pullMore = true;
 var swapperBalance = [];
 var swapperTransactions = [];
+var swapperSinceMay3rd = [];
 var transactionCatalog = [];
 var page = 1;
 
@@ -26,11 +27,15 @@ while (pullMore === true) {
         if(t.currency!="CAD") continue;
 
         createdAt = parseInt(Date.parse(t.createdAt));
-        if(createdAt < 1618963200000) {
+        if(createdAt < 1618963200000) { //april 20 at night
             // we hit april 20
             console.log("No more transactions to process, we hit 4/20 (nice) transactions");
             pullMore = false;
             break;
+        }
+
+        if(createdAt >= 1620014400000) { //may 3rd
+            swapperSinceMay3rd[swapper]=1;
         }
 
         if(t.direction=="credit") {
@@ -55,6 +60,7 @@ while (pullMore === true) {
     page++;
 }
 
+
 var strPrint = "";
 var tierCounter = 0;
 strPrint += "---------- You owe the following people ----------\n";
@@ -71,5 +77,13 @@ for (let i in swapperBalance) {
     }
 }
 
-strPrint+="\n\nSo far you have swapped with "+tierCounter+" different Shakepay friends 🚀"
+strPrint+="\n\nSo far you have swapped with "+tierCounter+" different Shakepay friends since April 20 🏓";
+
+swapperSinceMay3rdCounter=0;
+for (let i in swapperSinceMay3rd) {
+    swapperSinceMay3rdCounter++;
+}
+
+strPrint+="\n\nSo far you have swapped with "+swapperSinceMay3rdCounter+" different Shakepay friends since May 3rd 🏓";
+
 console.log(strPrint);
