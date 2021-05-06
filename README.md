@@ -2,7 +2,7 @@
 
 These scripts are provided "as is" and do not have any guarantees on their outcome. By using these scripts you acknowledge this disclamer and assume full responsibility of using them.
 
-If you wish to donate, send any amount other than 4.75-5$ to domi167. BTC and ETH Accepted :)
+If you wish to donate, send any amount other than 5$ to domi167. BTC and ETH Accepted :)
 
 ## all_swaps.js
 All swaps ever made that have a balance of less than -1 (they owe) or more than 1 (you owe)
