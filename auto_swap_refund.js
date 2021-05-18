@@ -25,7 +25,6 @@ var page = 1;
 
     swapperBalance["pestycentsender"] = -0.02; 
                       ^^^^  THIS IS A FICTIONAL USERNAME
-
 */
 
 while (pullMore === true) {
@@ -100,7 +99,7 @@ for(let swapper in swapperBalance) {
         console.log("Adjusted the balance for "+swapper+" from $"+balance+" to $5");
         balance=5;
     }
-    if(balance < wallet.balance) {
+    if(balance <= wallet.balance) {
         if(balance >= 4.75 && balance <= 5) {
             console.log("Send $"+balance+" to "+swapper+"?");
             if(confirm("Send $"+balance+" to "+swapper+"?")) {
