@@ -6,8 +6,8 @@ var transactionCatalog = [];
 var page = 1;
 
 /*
-    If you have made a donation to someone and would like to have it ignore,
-    add each underneath here. So if you made a donation to me of let's say 5.01 do:
+    If you made a donation to someone and would like to have it ignored,
+    add each underneath here. If you made a donation to me of let's say 5.01 do:
     swapperBalance["domi167"] = 5.01.
 
     If someone sent you money as a gift, or those pesty cent senders, 
