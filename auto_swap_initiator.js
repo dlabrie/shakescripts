@@ -1,5 +1,5 @@
 var swappers = [
-    "domi167"
+    "domi167","somiadow","stmich","hydra"
 ];
 var wallet = null;
 
@@ -25,7 +25,7 @@ var transactionCatalog = [];
 var page = 1;
 
 while (pullMore === true) {
-    console.log("pulling 2000 transactions from Shakepay api")
+    console.log("pulling 2000 transactions from Shakepay api");
     var transactionsResponse = await fetch("https://api.shakepay.com/transactions/history", {"headers": {"accept": "application/json","accept-language": "en-US,en;q=0.9,fr;q=0.8","authorization": window.sessionStorage.getItem("feathers-jwt"),"content-type": "application/json","sec-ch-ua": "\" Not A;Brand\";v=\"99\", \"Chromium\";v=\"90\", \"Microsoft Edge\";v=\"90\"","sec-ch-ua-mobile": "?0","sec-fetch-dest": "empty","sec-fetch-mode": "cors","sec-fetch-site": "same-site"},"referrerPolicy": "same-origin","body": "{\"pagination\":{\"descending\":true,\"rowsPerPage\":2000,\"page\":"+page+"},\"filterParams\":{}}","method": "POST","mode": "cors","credentials": "include"})
     var transactionsData = await transactionsResponse.json();
 
@@ -72,7 +72,7 @@ while (pullMore === true) {
 
 var swapper = null;
 for(let i in swappers) {
-    swapper = swappers[i];
+    swapper = swappers[i].toLowerCase();
     if(typeof swapperBalance[swapper] !== 'undefined') {
         console.log("skipping, you already swap with "+swapper+" today");
         continue;
