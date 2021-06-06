@@ -18,8 +18,13 @@ Last 4 days swaps and their 4 day balances
 
 ## n_days_swaps.js
 N days swaps and their day's balances (doesn't account for $5 exchanged on other days)
+
 1 = yesterday
+
 2 = day before yesterday and so on.
+
+## reorder_my_list.js
+Give it your list and it will sort it by the time people have returned during the day. If they haven't returned, they get stuck at the bottom of the list.
 
 ## todays_swaps.js
 Today's swaps and today's balances (doesn't account for $5 exchanged on other days)
