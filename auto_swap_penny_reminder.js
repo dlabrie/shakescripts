@@ -111,8 +111,8 @@ for(let swapper in swapperBalance) {
     }
 
     if(wallet.balance > 0.01) {
-        console.log("Send penny to "+swapper+" for the balance of $"+balance+"?");
-        if(confirm("Hi "+swapper+", please send me back the $"+balance+"")) {
+        console.log("Send penny to "+swapper+" for the balance of $"+balance+"? Last transaction: "+swapperTransactions[swapper][0].createdAt);
+        if(confirm("Hi "+swapper+", please send me back the $"+balance+".  Last transaction: "+swapperTransactions[swapper][0].createdAt)) {
             wallet.balance -= 0.01;
             console.log("Sending $"+balance+" to "+swapper)
             var sendMoneyResponse = await fetch("https://api.shakepay.com/transactions", {

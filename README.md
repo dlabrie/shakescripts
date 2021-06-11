@@ -13,6 +13,9 @@ Automatically send 5$ to a list of users specified at the beginning of the table
 ## auto_swap_refund.js
 Automatically send back to users who you owe money to
 
+## auto_swap_penny_reminder.js
+Automatically send pennies to users who you owe you and you haven't swapped with today.
+
 ## last_4_days_swaps.js
 Last 4 days swaps and their 4 day balances
 
