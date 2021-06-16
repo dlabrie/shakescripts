@@ -96,7 +96,7 @@
 
     strPrint += "\n\nSo far you have swapped with " + tierCounter + " different Shakepay friends since April 20 🏓";
 
-    strPrint += "\n\nSo far you have swapped with " + swapperSinceMay3rd.length + " different Shakepay friends since May 3rd 🏓";
+    strPrint += "\n\nSo far you have swapped with " + (Object.keys(swapperSinceMay3rd).length - 1) + " different Shakepay friends since May 3rd 🏓";
 
     console.log(strPrint);
 })();
