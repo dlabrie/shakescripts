@@ -1,3 +1,5 @@
+var swapperTransactions = [];
+
 (async function () {
     var swappers = [
         "domi167", "somiadow", "stmich", "hydra"
@@ -11,7 +13,6 @@
     var startTime = new Date(midnightStart.getTime() - msOffset);
 
     var pullMore = true;
-    var swapperTransactions = [];
     var page = 1;
 
     while (pullMore === true) {

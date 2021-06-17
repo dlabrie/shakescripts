@@ -1,3 +1,5 @@
+var swapperBalance = [];
+
 (async function () {
     var localTime = new Date();
     var localTimeOffset = localTime.getTimezoneOffset();
@@ -5,9 +7,7 @@
     var easternTime = new Date(localTime.getTime() + msOffset);
     var midnightStart = new Date(easternTime.getFullYear(), easternTime.getMonth(), easternTime.getDate(), 0, 0, 0, 0);
     var startTime = new Date(midnightStart.getTime() - msOffset);
-
     var pullMore = true;
-    var swapperBalance = [];
     var page = 1;
 
     while (pullMore === true) {

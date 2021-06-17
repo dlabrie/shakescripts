@@ -1,3 +1,6 @@
+var swapperBalance = [];
+var transactionCatalog = [];
+
 (async function () {
     var localTime = new Date();
     var localTimeOffset = localTime.getTimezoneOffset();
@@ -7,8 +10,6 @@
     var startTime = new Date(midnightStart.getTime() - msOffset - 1000 * 3600 * 24 * 4);
 
     var pullMore = true;
-    var swapperBalance = [];
-    var transactionCatalog = [];
     var page = 1;
 
     while (pullMore === true) {
