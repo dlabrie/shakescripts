@@ -1,10 +1,11 @@
+var swapperBalance = [];
+var swapperTransactions = [];
+
 (async function () {
-    var pullMore = true;
-    var swapperBalance = [];
-    var swapperTransactions = [];
-    var swapperSinceMay3rd = [];
-    var transactionCatalog = [];
-    var page = 1;
+    let pullMore = true;
+    let swapperSinceMay3rd = [];
+    let transactionCatalog = [];
+    let page = 1;
 
     /*
         If you made a donation to someone and would like to have it ignored,
@@ -18,8 +19,12 @@
                           ^^^^  THIS IS A FICTIONAL USERNAME
     */
 
+    // Clear the console window of all Shakepay warnings and errors. There are quite a few ...
+    console.clear();
+    console.log("Starting all_swaps.js");
+
     while (pullMore === true) {
-        console.log("pulling 2000 transactions from Shakepay api")
+        console.log(`Pulling 2000 transactions from Shakepay api. Page ${page}`)
         var transactionsResponse = await fetch("https://api.shakepay.com/transactions/history", { "headers": { "accept": "application/json", "accept-language": "en-US,en;q=0.9,fr;q=0.8", "authorization": window.sessionStorage.getItem("feathers-jwt"), "content-type": "application/json", "sec-ch-ua": "\" Not A;Brand\";v=\"99\", \"Chromium\";v=\"90\", \"Microsoft Edge\";v=\"90\"", "sec-ch-ua-mobile": "?0", "sec-fetch-dest": "empty", "sec-fetch-mode": "cors", "sec-fetch-site": "same-site" }, "referrerPolicy": "same-origin", "body": "{\"pagination\":{\"descending\":true,\"rowsPerPage\":2000,\"page\":" + page + "},\"filterParams\":{}}", "method": "POST", "mode": "cors", "credentials": "include" })
         var transactionsData = await transactionsResponse.json();
 

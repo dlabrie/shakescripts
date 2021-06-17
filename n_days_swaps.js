@@ -1,3 +1,5 @@
+var swapperBalance = [];
+
 (async function () {
     var localTime = new Date();
     var localTimeOffset = localTime.getTimezoneOffset();
@@ -10,7 +12,6 @@
     var endTime = new Date(midnightStart.getTime() - msOffset - 1000 * 3600 * 24 * (daysToGoBack - 1));
 
     var pullMore = true;
-    var swapperBalance = [];
     var page = 1;
 
     console.log("Going to pull logs for transactions between\n" + startTime.toUTCString() + " to\n" + endTime.toUTCString())
