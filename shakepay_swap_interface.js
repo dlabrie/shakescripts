@@ -81,7 +81,7 @@ content = `
                     </div> 
                 </div> 
                 <footer class="wallet-item-footer">
-                    <p class="is-size-7">Total Swaps</p>
+                    <p class="is-size-7">Total Swaps Today</p>
                 </footer>
             </div>
         </div>
@@ -408,10 +408,11 @@ var updateWaitlist = async () => {
 
     counter = 0;
     counterToday = 0;
+    console.log(startTime.getTime());
     for (let i in waitlist.history) {
         if(waitlist.history[i].name == "sentP2P") { 
             counter++;
-            if(parseInt(Date.parse(waitlist.history[i].createdAt) > startTime.getTime())) {
+            if(parseInt(Date.parse(waitlist.history[i].createdAt)) > startTime.getTime()) {
                 counterToday++;
             }
         }
