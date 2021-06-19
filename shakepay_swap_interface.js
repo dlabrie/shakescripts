@@ -23,77 +23,20 @@ const refreshAuthToken = async () => {
 
 setInterval(function () { refreshAuthToken() }, 900000);
 
-swapperBalanceInit = {
-    "someoneqc":-9.01,
-    "tbkiah":-4.2,
-    "bbmhst":-24.99,
-    "stmich":-4.2,
-    "bishthi":-20.0,
-    "opso":-50.0,
-    "alexinchains":-6.0,
-    "erikbloo":-4.7,
-    "grok":-5.01,
-    "ccie":-10.0,
-    "lylemupinga":-6.0,
-    "mito11koivu":-4.99,
-    "rogershaw":-13.40,
-    "stod123":-10.00,
-    "buzz":-10.00,
-    "philm":-5.01,
-    "akku143":-1.00,
-    "noleng":-20.00,
-    "idjmic":-10.00,
-    "winpak208":-3.19,
-    "majorasmaster":-5.07,
-    "hazmat":-2,
-    "kevin046":-5.01,
-    "alisia":-0.60,
-    "woblz":-0.01,
-    "cannacaged":-0.01,
-    "mstaxidrvr2":-0.01,
-    "somiadow":20,
-    "hydra":4.2,
-    "ddcazes":0.69,
-    "slacks":0.25,
-    "maelezo":0.01,
-    "maxxef":0.01,
-    "robotic":0.01,
-    "janetruong":0.01,
-    "kkac":0.26,
-    "nosabenaa":0.25,
-    "jfig111":0.05,
-    "gryffindave":0.01,
-    "skyzof":0.01,
-    "bbluephoenixx":0.01,
-    "rickyk":0.02,
-    "cdcrawford":50.00,
-    "heavyrage":225.0,
-    "cfcc":1.0,
-    "tammyz":4.50,
-    "danielcrypto":4.50,
-    "michaelday":4.50,
-    "joshduerksen":4.50,
-    "moneyburner":4.50,
-    "upupaway":4.50,
-    "rioderms":4.96,
-    "andytmariam":4.50,
-    "bigpoppa":4.50,
-    "olimarquis":4.50,
-    "dz23":4.50,
-    "wills":4.50,
-    "kiks":4.50,
-}
 /*
     If you made a donation to someone and would like to have it ignored,
     add each underneath here. If you made a donation to me of let's say 5.01 do:
-    swapperBalance["domi167"] = 5.01.
+    "domi167": 5.01,
 
     If someone sent you money as a gift, or those pesty cent senders, 
     add them here with a negative amount.
 
-    swapperBalance["pestycentsender"] = -0.02; 
-                        ^^^^  THIS IS A FICTIONAL USERNAME
+    "pestycentsender":-0.02,
+           ^^^^  THIS IS A FICTIONAL USERNAME
 */
+swapperBalanceInit = {
+    "someshaketag":0,
+}
 
 content = `
 <section class="section">
