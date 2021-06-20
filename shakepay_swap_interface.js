@@ -509,8 +509,8 @@ var sendAFiver = async () => {
         shaketag = shaketags[i];
 
         swapperNames = Object.values(swappersToday);
-        for (let i in swapperNames) {
-            if(swapperNames[i] == shaketag) {
+        for (let j in swapperNames) {
+            if(swapperNames[j] == shaketag) {
                 output("You've already sent a fiver to "+shaketag+" today.");
                 return false;
             }
