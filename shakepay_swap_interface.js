@@ -215,7 +215,14 @@ var parseTransaction = function(t) {
     labelCatalog[frmid] = frmusr;
 }
 
+var updateInProgress = false;
 var refreshTransactions = async () => {
+    if(updateInProgress == true) {
+        alert("A process to refresh transactions is already running, please try again when it's done");
+        return false;
+    }
+    updateInProgress = true;
+
     let pullMore = true;
     let page = 1;
 
@@ -276,10 +283,12 @@ var refreshTransactions = async () => {
     });
 
     newTransactionCatalog = {};
-    for(let i in items) {
-        newTransactionCatalog[items[i][0]] = transactionCatalog[items[i][0]];
+    for(let nwt in items) {
+        newTransactionCatalog[items[nwt][0]] = transactionCatalog[items[nwt][0]];
     }
     transactionCatalog = newTransactionCatalog;
+
+    updateInProgress = false;
 };
 
 var swapperBalance = {}
@@ -564,7 +573,7 @@ var swapBack = async() => {
                     output("Sending $" + amount + " to " + swapper_usr)
                     sendFunds(amount, wallet, swapper_usr, "Thanks for swapping with me 😘")
                 } else {
-                    output("Did not send $" + balance + " to " + swapper_usr);
+                    output("Did not send $" + amount + " to " + swapper_usr);
                 }
             } else {
                 output("Ignoring balance with " + swapper_usr + " since it's outside of range (" + amount + ")");
@@ -694,5 +703,5 @@ var getTransactions = async () => {
 
 }
 
-updateWaitlist();
+await updateWaitlist();
 refreshTransactions();
