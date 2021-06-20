@@ -215,7 +215,7 @@ var parseTransaction = function(t) {
     labelCatalog[frmid] = frmusr;
 }
 
-const refreshTransactions = async () => {
+var refreshTransactions = async () => {
     let pullMore = true;
     let page = 1;
 
