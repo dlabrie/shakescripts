@@ -249,21 +249,20 @@ const refreshTransactions = async () => {
             createdAt = parseInt(Date.parse(t.createdAt));
             if (createdAt < 1618963200000) { //april 20 at night
                 // we hit april 20
-                output("No more transactions to process, we hit 4/20 (nice) transactions");
+                output(Object.keys(transactionCatalog).length+" transactions loaded.");
                 pullMore = false;
                 break;
             }
 
             if(typeof transactionCatalog[t.transactionId] !== 'undefined') {
                 foundTransctions++;
-                continue;
             } 
 
             parseTransaction(t);
         }
 
         if(foundTransctions > 10) {
-            output("Appears the rest of the transactions are cached.");
+            output(Object.keys(transactionCatalog).length+" transactions loaded.");
             pullMore = false;
         }
         page++;
@@ -513,12 +512,12 @@ var sendAFiver = async () => {
     note = document.getElementById("swapNote").value;
 
     wallet = await getWallet("CAD");
-    for(let i in shaketags) {
-        shaketag = shaketags[i];
+    for(let st in shaketags) {
+        shaketag = shaketags[st];
 
         swapperNames = Object.values(swappersToday);
-        for (let j in swapperNames) {
-            if(swapperNames[j] == shaketag) {
+        for (let sn in swapperNames) {
+            if(swapperNames[sn] == shaketag) {
                 output("You've already sent a fiver to "+shaketag+" today.");
                 return false;
             }
