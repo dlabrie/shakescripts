@@ -664,8 +664,8 @@ var getTransactions = async () => {
     html = "";
     for (let i in shaketagTransactions) {
         t = shaketagTransactions[i];
-        updown = t.amount < 0 ? "to":"from";
-        warningsuccess = t.amount < 0 ? "warning-light":"success";
+        updown = t.amount > 0 ? "to":"from";
+        warningsuccess = t.amount > 0 ? "warning-light":"success";
         amount = t.amount<0 ? (t.amount*-1).toFixed(2) : t.amount.toFixed(2);
         html+= `<div data-v-6cd0ff42 class="transaction-item">
                 <div data-v-6cd0ff42 class="columns">
