@@ -140,6 +140,7 @@ content = `
             </div>
         </div>
         <div class="column is-three-fifths">
+            <button aria-label="Reset transaction cache and load it again" data-microtip-position="bottom" data-microtip-size="small" role="tooltip" class="tooltip button is-pulled-right" onclick="resetTransactions()">Reset Cache</button>
             <h1 class="title has-text-weight-normal">Output from scripts</h1>
             <div class="wallet-item">
                 <div class="box wallet-item-content" id="output" style="font-size: 15px;"></div> 
@@ -315,6 +316,13 @@ function processBalances() {
     }
 }
 
+var resetTransactions = async() => {
+    if(confirm("Are you sure you want to reset the transaction history and load it again?")) {
+        transactionCatalog = {};
+        await refreshTransactions();
+    }
+}
+
 var updateDues = async() => {
     await refreshTransactions();
     processBalances();
@@ -332,10 +340,10 @@ var updateDues = async() => {
                     <div class="columns">
                         <div class="column is-8 transaction-item__title">
                             <p class="title is-4 has-text-neutral-ultra-dark">@${labelCatalog[i]}</p> 
-                            <p class="subtitle is-size-6 has-text-neutral-very-dark">${swapperTransactions[i][0].createdAt}</p>
+                            <p class="subtitle is-size-6 has-text-neutral-very-dark">${note} ${swapperTransactions[i][0].createdAt}</p>
                         </div> 
                         <div class="column is-4 transaction-item__details" style="justify-content: flex-end;">
-                            <p class="title is-5 has-text-neutral-ultra-dark has-text-right">${note} ${swapperBalance[i].toFixed(2)}</p>
+                            <p class="title is-5 has-text-neutral-ultra-dark has-text-right">${swapperBalance[i].toFixed(2)}</p>
                         </div>
                     </div> 
                 </div>`;
