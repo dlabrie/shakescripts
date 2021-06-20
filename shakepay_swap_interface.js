@@ -547,7 +547,7 @@ var swapBack = async() => {
             output("Adjusted the balance for " + swapper_usr + " from $" + amount + " to $5");
             amount = 5;
         }
-        if (amount <= wallet.balance) {
+        if (amount >= wallet.balance) {
             if (amount <= 20) {
                 output("Send $" + amount + " to " + swapper_usr + "?");
                 if (confirm("Send $" + amount + " to " + swapper_usr + "?")) {
