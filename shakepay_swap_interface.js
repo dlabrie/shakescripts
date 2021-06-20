@@ -103,6 +103,7 @@ content = `
     </div>
     <div class="columns">
         <div class="column is-size-4">
+            <button aria-label="Todays Swap List" data-microtip-position="bottom" data-microtip-size="small" role="tooltip" class="tooltip button is-pulled-right" onclick="todays_swappers()">Today's Swaps</button>
             <h1 class="title has-text-weight-normal">Swap</h1>
             <div class="card">
                 <div>
@@ -131,8 +132,8 @@ content = `
                         </div>
                     </div> 
                     <footer class="card-footer">
-                        <a class="card-footer-item" style="background:darkorange">
-                            <span onclick='sendAFiver()' class="has-text-white">Send</span>
+                        <a class="card-footer-item" style="background:darkorange" onclick='sendAFiver()'>
+                            <span class="has-text-white">Send</span>
                         </a>
                     </footer>
                 </div>
@@ -373,7 +374,7 @@ var todays_swappers = async () => {
     swapperNames = Object.values(swappersToday).sort();
     strPrint = "";
     for (let i in swapperNames) {
-        strPrint += swapperNames[i] + "<br />";
+        strPrint += swapperNames[i] + "\n";
     }
     output(strPrint);
 }
@@ -388,7 +389,6 @@ var updateWaitlist = async () => {
         "credentials": "include"
     });
     var waitlist = await waitlistResponse.json();
-    console.log(waitlist);
 
     badges = "";
     for (let i in waitlist.badges) {
@@ -408,7 +408,6 @@ var updateWaitlist = async () => {
 
     counter = 0;
     counterToday = 0;
-    console.log(startTime.getTime());
     for (let i in waitlist.history) {
         if(waitlist.history[i].name == "sentP2P") { 
             counter++;
