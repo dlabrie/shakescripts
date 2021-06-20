@@ -102,7 +102,7 @@ content = `
     </div> 
     </div>
     <div class="columns">
-        <div class="column is-size-4">
+        <div class="column is-two-fifths">
             <button aria-label="Todays Swap List" data-microtip-position="bottom" data-microtip-size="small" role="tooltip" class="tooltip button is-pulled-right" onclick="todays_swappers()">Today's Swaps</button>
             <h1 class="title has-text-weight-normal">Swap</h1>
             <div class="card">
@@ -116,7 +116,7 @@ content = `
                             </label> 
                             <div class="field has-addons">
                                 <div class="control" style="width: 100%;">
-                                    <input type="text" id="swapShaketag" placeholder="Shaketag" class="input" value=""> 
+                                    <input type="text" id="swapShaketag" placeholder="Shaketag(s) (comma delimited)" class="input" value=""> 
                                 </div> 
                             </div> 
                             <div class="content">
@@ -139,12 +139,10 @@ content = `
                 </div>
             </div>
         </div>
-        <div class="column is-size-4">
+        <div class="column is-three-fifths">
             <h1 class="title has-text-weight-normal">Output from scripts</h1>
             <div class="wallet-item">
-                <div class="box wallet-item-content" id="output" style="font-size: 15px;">
-
-                </div> 
+                <div class="box wallet-item-content" id="output" style="font-size: 15px;"></div> 
             </div>
         </div>
     </div>
@@ -152,16 +150,46 @@ content = `
         <div class="column is-size-6">
             <button aria-label="Refresh dues" data-microtip-position="bottom" data-microtip-size="small" role="tooltip" class="tooltip button is-pulled-right" onclick="updateDues()"><span class="icon animated"><i class="fas fa-redo-alt"></i></span></button>
             <button aria-label="Refund" data-microtip-position="bottom" data-microtip-size="small" role="tooltip" class="tooltip button is-pulled-right" onclick="swapBack()">Refund</button>
-            <h1 class="title has-text-weight-normal">You owe</h1>
-            <div class="box transactions-box" data-v-24d85c20="" id="youOwe"> </div>
+            <h1 class="title has-text-weight-normal">You owe <span id="youOweAmount"></span></h1>
+            <div class="box transactions-box" data-v-24d85c20="" id="youOwe"></div>
         </div>
         <div class="column is-size-6">
             <button aria-label="Send Penny Reminders" data-microtip-position="bottom" data-microtip-size="small" role="tooltip" class="tooltip button is-pulled-right" onclick="reminderPenny()">Penny</button>
             <button aria-label="Send Satoshi Reminders" data-microtip-position="bottom" data-microtip-size="small" role="tooltip" class="tooltip button is-pulled-right" onclick="reminderSat()">Sat</button>
-            <h1 class="title has-text-weight-normal">They owe</h1>
-            <div class="box transactions-box" data-v-24d85c20="" id="theyOwe"> </div>
+            <h1 class="title has-text-weight-normal">They owe <span id="theyOweAmount"></span></h1>
+            <div class="box transactions-box" data-v-24d85c20="" id="theyOwe"></div>
         </div>
     </div>
+    <div class="columns">
+        <div class="column is-one-quarters">
+            <h1 class="title has-text-weight-normal">Transactions</h1>
+            <div class="card">
+                <div>
+                <div class="card-content">
+                        <div class="content">
+                            <label class="label">Shaketag
+                            </label> 
+                            <div class="field">
+                                <div class="control" style="width: 100%;">
+                                    <input type="text" id="shaketagTransactions" placeholder="Shaketag" class="input" value=""> 
+                                </div> 
+                            </div> 
+                        </div>
+                    </div> 
+                    <footer class="card-footer">
+                        <a class="card-footer-item" style="background:darkorange" onclick='getTransactions()'>
+                            <span class="has-text-white">Get Transactions</span>
+                        </a>
+                    </footer>
+                </div>
+            </div>
+        </div>
+        <div class="column is-three-quarters">
+            <h1 class="title has-text-weight-normal">Results</h1>
+            <div class="box transactions-box" data-v-24d85c20="" id="shaketagTransactionResults"> </div>
+        </div>
+    </div>
+</div>
 </section>
 `;
 homeContent = document.getElementById("dashboard-content").lastElementChild.firstElementChild.firstElementChild;
@@ -295,8 +323,11 @@ var updateDues = async() => {
     var tierCounter = 0;
     
     html = "";
+    totalAmount = 0;
     for (let i in swapperBalance) {
         if (swapperBalance[i] > 1) {
+            totalAmount += swapperBalance[i];
+            note = swapperTransactions[i][0].note==""?"":swapperTransactions[i][0].note+"<br />"
             html+= `<div class="transaction-item">
                     <div class="columns">
                         <div class="column is-8 transaction-item__title">
@@ -304,22 +335,27 @@ var updateDues = async() => {
                             <p class="subtitle is-size-6 has-text-neutral-very-dark">${swapperTransactions[i][0].createdAt}</p>
                         </div> 
                         <div class="column is-4 transaction-item__details" style="justify-content: flex-end;">
-                            <p class="title is-5 has-text-neutral-ultra-dark has-text-right">${swapperBalance[i].toFixed(2)}</p>
+                            <p class="title is-5 has-text-neutral-ultra-dark has-text-right">${note}${swapperBalance[i].toFixed(2)}</p>
                         </div>
                     </div> 
                 </div>`;
         }
     }
+    totalAmount = totalAmount.toFixed(2);
     document.getElementById("youOwe").innerHTML = html;
-    
+    document.getElementById("youOweAmount").innerText = "$"+String(totalAmount).replace(/(.)(?=(\d{3})+$)/g,'$1,');
+
     html = "";
+    totalAmount = 0;
     for (let i in swapperBalance) {
         if (swapperBalance[i] < -1) {
+            totalAmount += swapperBalance[i];
+            note = swapperTransactions[i][0].note==""?"":swapperTransactions[i][0].note+"<br />"
             html+= `<div class="transaction-item">
                     <div class="columns">
                         <div class="column is-8 transaction-item__title">
                             <p class="title is-4 has-text-neutral-ultra-dark">@${labelCatalog[i]}</p> 
-                            <p class="subtitle is-size-6 has-text-neutral-very-dark">${swapperTransactions[i][0].createdAt}</p>
+                            <p class="subtitle is-size-6 has-text-neutral-very-dark">${note}${swapperTransactions[i][0].createdAt}</p>
                         </div> 
                         <div class="column is-4 transaction-item__details" style="justify-content: flex-end;">
                             <p class="title is-5 has-text-neutral-ultra-dark has-text-right">${swapperBalance[i].toFixed(2)}</p>
@@ -328,10 +364,13 @@ var updateDues = async() => {
                 </div>`;
         }
     }
+    totalAmount *= -1;
+    totalAmount = totalAmount.toFixed(2);
     document.getElementById("theyOwe").innerHTML = html;
+    document.getElementById("theyOweAmount").innerText = "$"+String(totalAmount).replace(/(.)(?=(\d{3})+$)/g,'$1,');
 
-    strPrint += "So far you have swapped with " + (Object.keys(swapperSinceMay3rd).length - 1) + " different Shakepay friends since May 3rd 🏓";
-    strPrint += "\n\nSo far you have swapped with " + (Object.keys(swapperBalance).length - 1) + " different Shakepay friends since April 20 🏓";
+    strPrint += "So far you have swapped with " + (Object.keys(swapperSinceMay3rd).length) + " different Shakepay friends since May 3rd 🏓";
+    strPrint += "\n\nSo far you have swapped with " + (Object.keys(swapperBalance).length) + " different Shakepay friends since April 20 🏓";
     output(strPrint);
 }
 
@@ -436,6 +475,12 @@ var sendFunds = async (amount, wallet, swapper, note) => {
         output("Invalid destination");
         return false;
     }
+
+    if(wallet.balance < amount) {
+        output("You don't have enough funds to send "+amount);
+        return false;
+    }
+
     output("Sending to "+swapper);
     var sendMoneyResponse = await fetch("https://api.shakepay.com/transactions", {
         "headers": {"accept": "application/json","accept-language": "en-US,en;q=0.9,fr;q=0.8","authorization": window.sessionStorage.getItem("feathers-jwt"),"content-type": "application/json","sec-ch-ua": "\" Not A;Brand\";v=\"99\", \"Chromium\";v=\"90\", \"Microsoft Edge\";v=\"90\"","sec-ch-ua-mobile": "?0","sec-fetch-dest": "empty","sec-fetch-mode": "cors","sec-fetch-site": "same-site"},
@@ -456,20 +501,24 @@ var sendFunds = async (amount, wallet, swapper, note) => {
 var sendAFiver = async () => {
     await processTodaySwaps();
 
-    shaketag = document.getElementById("swapShaketag").value;
+    shaketags = document.getElementById("swapShaketag").value.toLowerCase().replace(/[^a-z0-9\,]/gi,"").split(",");
     note = document.getElementById("swapNote").value;
 
-    swapperNames = Object.values(swappersToday).sort();
-    for (let i in swapperNames) {
-        if(swapperNames[i] == shaketag) {
-            output("You've already sent a fiver to "+shaketag+" today.");
-            return false;
-        }
-    }
-
     wallet = await getWallet("CAD");
-    
-    await sendFunds("5.00",wallet,shaketag,note)
+    for(let i in shaketags) {
+        shaketag = shaketags[i];
+
+        swapperNames = Object.values(swappersToday).sort();
+        for (let i in swapperNames) {
+            if(swapperNames[i] == shaketag) {
+                output("You've already sent a fiver to "+shaketag+" today.");
+                return false;
+            }
+        }
+        
+        if(confirm("Send $5 to "+shaketag+"?"))
+            await sendFunds("5.00",wallet,shaketag,note);
+    }
     document.getElementById("swapShaketag").value = "";
 }
 
@@ -592,5 +641,44 @@ var reminderSat = async() => {
         }
     }
 }
+
+var getTransactions = async () => {
+    await refreshTransactions();
+
+    shaketag = document.getElementById("shaketagTransactions").value.toLowerCase();
+
+    shaketagTransactions = []
+    for(let i in transactionCatalog) {
+        t = transactionCatalog[i];
+
+        if(labelCatalog[t.frmid] === shaketag)
+            shaketagTransactions.push(t);
+    }
+    
+    html = "";
+    for (let i in shaketagTransactions) {
+        t = shaketagTransactions[i];
+        updown = t.amount < 0 ? "to":"from";
+        warningsuccess = t.amount < 0 ? "warning-light":"success";
+        amount = t.amount<0 ? (t.amount*-1).toFixed(2) : t.amount.toFixed(2);
+        html+= `<div data-v-6cd0ff42 class="transaction-item">
+                <div data-v-6cd0ff42 class="columns">
+                    <div data-v-6cd0ff42="" class="column is-2 transaction-item__icon">
+                        <span data-v-6cd0ff42="" class="icon is-medium"><i data-v-6cd0ff42="" class="fal fa-2x fa-arrow-${updown}-bottom has-text-${warningsuccess}"></i></span>
+                    </div>
+                    <div class="column is-8 transaction-item__title">
+                        <p class="title is-4 has-text-neutral-ultra-dark">@${labelCatalog[t.frmid]}</p> 
+                        <p class="subtitle is-size-6 has-text-neutral-very-dark">${t.note}<br />${t.createdAt}</p>
+                    </div> 
+                    <div data-v-6cd0ff42="" class="column is-2 transaction-item__details" style="justify-content: flex-end;">
+                        <p class="title is-5 has-text-neutral-ultra-dark has-text-right">${amount}</p>
+                    </div>
+                </div> 
+            </div>`;
+    }
+    document.getElementById("shaketagTransactionResults").innerHTML = html;
+
+}
+
 
 updateWaitlist();
