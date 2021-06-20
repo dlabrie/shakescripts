@@ -515,6 +515,12 @@ var sendAFiver = async () => {
                 return false;
             }
         }
+
+        if(wallet.balance < 5) {
+            output("Ran out of funds");
+            break;
+        }
+        wallet.balance -= 5;
         
         if(confirm("Send $5 to "+shaketag+"?"))
             await sendFunds("5.00",wallet,shaketag,note);
