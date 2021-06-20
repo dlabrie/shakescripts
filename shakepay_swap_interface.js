@@ -335,7 +335,7 @@ var updateDues = async() => {
                             <p class="subtitle is-size-6 has-text-neutral-very-dark">${swapperTransactions[i][0].createdAt}</p>
                         </div> 
                         <div class="column is-4 transaction-item__details" style="justify-content: flex-end;">
-                            <p class="title is-5 has-text-neutral-ultra-dark has-text-right">${note}${swapperBalance[i].toFixed(2)}</p>
+                            <p class="title is-5 has-text-neutral-ultra-dark has-text-right">${note} ${swapperBalance[i].toFixed(2)}</p>
                         </div>
                     </div> 
                 </div>`;
@@ -508,7 +508,7 @@ var sendAFiver = async () => {
     for(let i in shaketags) {
         shaketag = shaketags[i];
 
-        swapperNames = Object.values(swappersToday).sort();
+        swapperNames = Object.values(swappersToday);
         for (let i in swapperNames) {
             if(swapperNames[i] == shaketag) {
                 output("You've already sent a fiver to "+shaketag+" today.");
@@ -541,13 +541,14 @@ var swapBack = async() => {
     for (let swapper_id in swapperBalance) {
         swapper_usr = labelCatalog[swapper_id];
 
-        amount = swapperBalance[swapper_id].toFixed(2);
+        amount = swapperBalance[swapper_id];
         if (amount < 4.75) continue;
         if (amount < 5) {
             output("Adjusted the balance for " + swapper_usr + " from $" + amount + " to $5");
             amount = 5;
         }
-        if (amount >= wallet.balance) {
+
+        if (parseFloat(amount) < parseFloat(wallet.balance)) {
             if (amount <= 20) {
                 output("Send $" + amount + " to " + swapper_usr + "?");
                 if (confirm("Send $" + amount + " to " + swapper_usr + "?")) {
@@ -556,13 +557,13 @@ var swapBack = async() => {
                     output("Sending $" + amount + " to " + swapper_usr)
                     sendFunds(amount, wallet, swapper_usr, "Thanks for swapping with me 😘")
                 } else {
-                    output("Did not send $" + balance + " to " + swapper);
+                    output("Did not send $" + balance + " to " + swapper_usr);
                 }
             } else {
-                output("Ignoring balance with " + swapper + " since it's outside of range (" + balance + ")");
+                output("Ignoring balance with " + swapper_usr + " since it's outside of range (" + amount + ")");
             }
         } else {
-            output("You don't have the funds to return $" + balance + " to " + swapper);
+            output("You don't have the funds to return $" + amount + " to " + swapper_usr + " since you only have $" + wallet.balance);
         }
     }
 }
@@ -686,5 +687,5 @@ var getTransactions = async () => {
 
 }
 
-
 updateWaitlist();
+refreshTransactions();
