@@ -103,7 +103,7 @@ content = `
     </div>
     <div class="columns">
         <div class="column is-two-fifths">
-            <button aria-label="Todays Swap List" data-microtip-position="bottom" data-microtip-size="small" role="tooltip" class="tooltip button is-pulled-right" onclick="todays_swappers()">Today's Swaps</button>
+            <button aria-label="Todays Swap List" data-microtip-position="bottom" data-microtip-size="small" role="tooltip" class="tooltip button is-pulled-right" onclick="todays_swappers()">Today's Initiated Swaps</button>
             <h1 class="title has-text-weight-normal">Swap</h1>
             <div class="card">
                 <div>
@@ -408,7 +408,7 @@ var processTodaySwaps = async () => {
     for(let i in transactionCatalog) {
         t = transactionCatalog[i];
 
-        if(t.amount < 5.0)
+        if(t.amount > -5.0)
             continue;
 
         swapper_id = t.frmid;
