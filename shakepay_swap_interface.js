@@ -704,4 +704,4 @@ var getTransactions = async () => {
 }
 
 await updateWaitlist();
-refreshTransactions();
+updateDues();
