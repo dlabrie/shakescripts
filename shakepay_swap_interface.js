@@ -1,3 +1,18 @@
+/*
+    If you made a donation to someone and would like to have it ignored,
+    add each underneath here. If you made a donation to me of let's say 5.01 do:
+    "domi167": 5.01,
+
+    If someone sent you money as a gift, or those pesty cent senders, 
+    add them here with a negative amount.
+
+    "pestycentsender":-0.02,
+           ^^^^  THIS IS A FICTIONAL USERNAME
+*/
+swapperBalanceInit = {
+    "someshaketag":0,
+}
+
 const refreshAuthToken = async () => {
     var AuthResponse = await fetch("https://api.shakepay.com/authentication", {
         "headers": {
@@ -22,21 +37,6 @@ const refreshAuthToken = async () => {
 };
 
 setInterval(function () { refreshAuthToken() }, 900000);
-
-/*
-    If you made a donation to someone and would like to have it ignored,
-    add each underneath here. If you made a donation to me of let's say 5.01 do:
-    "domi167": 5.01,
-
-    If someone sent you money as a gift, or those pesty cent senders, 
-    add them here with a negative amount.
-
-    "pestycentsender":-0.02,
-           ^^^^  THIS IS A FICTIONAL USERNAME
-*/
-swapperBalanceInit = {
-    "someshaketag":0,
-}
 
 content = `
 <section class="section">
@@ -182,6 +182,16 @@ content = `
                             <span class="has-text-white">Get Transactions</span>
                         </a>
                     </footer>
+                </div>
+            </div>
+            <br />
+            <div class="card">
+                <div>
+                    <footer class="card-footer">
+                        <a class="card-footer-item" style="background:darkorange" onclick="getCommentedCredits()">
+                            <span class="has-text-white">Last 1000 commented credits</span>
+                        </a>
+                    </footer>                    
                 </div>
             </div>
         </div>
@@ -669,6 +679,27 @@ var reminderSat = async() => {
     }
 }
 
+var transactionHTML = (t) => {
+    updown = t.amount > 0 ? "to":"from";
+    warningsuccess = t.amount > 0 ? "success":"warning-light";
+    amount = t.amount<0 ? (t.amount*-1).toFixed(2) : t.amount.toFixed(2);
+    return `<div data-v-6cd0ff42 class="transaction-item">
+            <div data-v-6cd0ff42 class="columns">
+                <div data-v-6cd0ff42="" class="column is-2 transaction-item__icon">
+                    <span data-v-6cd0ff42="" class="icon is-medium"><i data-v-6cd0ff42="" class="fal fa-2x fa-arrow-${updown}-bottom has-text-${warningsuccess}"></i></span>
+                </div>
+                <div class="column is-8 transaction-item__title">
+                    <p class="title is-4 has-text-neutral-ultra-dark">@${labelCatalog[t.frmid]}</p> 
+                    <p class="subtitle is-size-6 has-text-neutral-very-dark">${t.note}<br />${t.createdAt}</p>
+                </div> 
+                <div data-v-6cd0ff42="" class="column is-2 transaction-item__details" style="justify-content: flex-end;">
+                    <p class="title is-5 has-text-neutral-ultra-dark has-text-right">${amount}</p>
+                </div>
+            </div> 
+        </div>`;
+
+}
+
 var getTransactions = async () => {
     await refreshTransactions();
 
@@ -683,29 +714,33 @@ var getTransactions = async () => {
     }
     
     html = "";
-    for (let i in shaketagTransactions) {
-        t = shaketagTransactions[i];
-        updown = t.amount > 0 ? "to":"from";
-        warningsuccess = t.amount > 0 ? "warning-light":"success";
-        amount = t.amount<0 ? (t.amount*-1).toFixed(2) : t.amount.toFixed(2);
-        html+= `<div data-v-6cd0ff42 class="transaction-item">
-                <div data-v-6cd0ff42 class="columns">
-                    <div data-v-6cd0ff42="" class="column is-2 transaction-item__icon">
-                        <span data-v-6cd0ff42="" class="icon is-medium"><i data-v-6cd0ff42="" class="fal fa-2x fa-arrow-${updown}-bottom has-text-${warningsuccess}"></i></span>
-                    </div>
-                    <div class="column is-8 transaction-item__title">
-                        <p class="title is-4 has-text-neutral-ultra-dark">@${labelCatalog[t.frmid]}</p> 
-                        <p class="subtitle is-size-6 has-text-neutral-very-dark">${t.note}<br />${t.createdAt}</p>
-                    </div> 
-                    <div data-v-6cd0ff42="" class="column is-2 transaction-item__details" style="justify-content: flex-end;">
-                        <p class="title is-5 has-text-neutral-ultra-dark has-text-right">${amount}</p>
-                    </div>
-                </div> 
-            </div>`;
+    for (let j in shaketagTransactions) {
+        html+= transactionHTML(shaketagTransactions[j]);
     }
     document.getElementById("shaketagTransactionResults").innerHTML = html;
 
 }
+
+var getCommentedCredits = async () => {
+    await refreshTransactions();
+
+    shaketagTransactions = []
+    for(let i in transactionCatalog) {
+        t = transactionCatalog[i];
+        if(t.note != "" && t.amount > 0)
+            shaketagTransactions.push(t);
+
+        if(shaketagTransactions.length >= 1000) break;
+    }
+    
+    html = "";
+    for (let j in shaketagTransactions) {
+        html+= transactionHTML(shaketagTransactions[j]);
+    }
+    document.getElementById("shaketagTransactionResults").innerHTML = html;
+
+}
+
 
 await updateWaitlist();
 updateDues();
