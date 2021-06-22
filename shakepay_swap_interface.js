@@ -525,13 +525,17 @@ var sendAFiver = async () => {
         shaketag = shaketags[st];
 
         swapperNames = Object.values(swappersToday);
+        found = false;
         for (let sn in swapperNames) {
             if(swapperNames[sn] == shaketag) {
                 output("You've already sent a fiver to "+shaketag+" today.");
-                return false;
+                found = true;
+                break;
             }
         }
 
+        if(found) continue;
+        
         if(wallet.balance < 5) {
             output("Ran out of funds");
             break;
