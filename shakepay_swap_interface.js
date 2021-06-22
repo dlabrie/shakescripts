@@ -535,7 +535,7 @@ var sendAFiver = async () => {
         }
 
         if(found) continue;
-        
+
         if(wallet.balance < 5) {
             output("Ran out of funds");
             break;
@@ -575,7 +575,7 @@ var swapBack = async() => {
                     wallet.balance -= amount;
                     wallet.balance = wallet.balance.toFixed(2);
                     output("Sending $" + amount + " to " + swapper_usr)
-                    sendFunds(amount, wallet, swapper_usr, "Thanks for swapping with me 😘")
+                    await sendFunds(amount, wallet, swapper_usr, "Thanks for swapping with me 😘")
                 } else {
                     output("Did not send $" + amount + " to " + swapper_usr);
                 }
@@ -659,7 +659,7 @@ var reminderSat = async() => {
             if (confirm("Send a satoshi to " + swapper_usr + "?")) {
                 wallet.balance -= 0.00000001;
                 output("Sending a satoshi to " + swapper_usr)
-                sendFunds(0.00000001, wallet, swapper_usr, "Hi " + swapper_usr + ", please send me back the $" + balance + "")
+                await sendFunds(0.00000001, wallet, swapper_usr, "Hi " + swapper_usr + ", please send me back the $" + balance + "")
             } else {
                 output("Did not send a satoshi to " + swapper_usr);
             }
