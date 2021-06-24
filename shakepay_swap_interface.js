@@ -617,7 +617,7 @@ var reminderPenny = async() => {
         
         if (balance > -1) continue;
 
-        balance = balance * -1;
+        balance = balance * -1 + 0.01;
         lastTransaction = swapperTransactions[swapper_id][0].createdAtUnix
         if (lastTransaction > startTime.getTime()) {
             output("The last transaction with " + swapper_usr + " dates from today - " + swapperTransactions[swapper_id][0].createdAt);
