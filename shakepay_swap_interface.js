@@ -225,6 +225,9 @@ var parseTransaction = function(t) {
     labelCatalog[frmid] = frmusr;
 }
 
+var beforeUTC = new Date().toISOString();
+var sinceUTC = null;
+
 var updateInProgress = false;
 var refreshTransactions = async () => {
     if(updateInProgress == true) {
@@ -236,18 +239,43 @@ var refreshTransactions = async () => {
     let pullMore = true;
     let page = 1;
 
-    pageSize = Object.keys(transactionCatalog).length==0?2000:200;
+    initialLoad = Object.keys(transactionCatalog).length==0;
 
     // Clear the console window of all Shakepay warnings and errors. There are quite a few ...
     while (pullMore === true) {
-        output(`Pulling up to ${pageSize} transactions from Shakepay API. Page ${page}`)
-        if(pageSize==2000)
-            var transactionsResponse = await fetch("https://api.shakepay.com/transactions/history", { "headers": { "accept": "application/json", "accept-language": "en-US,en;q=0.9,fr;q=0.8", "authorization": window.sessionStorage.getItem("feathers-jwt"), "content-type": "application/json", "sec-ch-ua": "\" Not A;Brand\";v=\"99\", \"Chromium\";v=\"90\", \"Microsoft Edge\";v=\"90\"", "sec-ch-ua-mobile": "?0", "sec-fetch-dest": "empty", "sec-fetch-mode": "cors", "sec-fetch-site": "same-site" }, "referrerPolicy": "same-origin", "body": "{\"pagination\":{\"descending\":true,\"rowsPerPage\":2000,\"page\":" + page + "},\"filterParams\":{}}", "method": "POST", "mode": "cors", "credentials": "include" })
-        else
-            var transactionsResponse = await fetch("https://api.shakepay.com/transactions/history", { "headers": { "accept": "application/json", "accept-language": "en-US,en;q=0.9,fr;q=0.8", "authorization": window.sessionStorage.getItem("feathers-jwt"), "content-type": "application/json", "sec-ch-ua": "\" Not A;Brand\";v=\"99\", \"Chromium\";v=\"90\", \"Microsoft Edge\";v=\"90\"", "sec-ch-ua-mobile": "?0", "sec-fetch-dest": "empty", "sec-fetch-mode": "cors", "sec-fetch-site": "same-site" }, "referrerPolicy": "same-origin", "body": "{\"filterParams\":{\"currencies\":[\"CAD\"]}}", "method": "POST", "mode": "cors", "credentials": "include" })
         
-        var transactionsData = await transactionsResponse.json();
-        var transactions = transactionsData.data;
+
+        if(initialLoad) {
+            output(`Pulling up to 2000 transactions from Shakepay API. Before ${beforeUTC}`)
+            var transactionsResponse = await fetch("https://api.shakepay.com/transactions/history?limit=2000&currency=CAD&before="+beforeUTC, { 
+                "headers": { 
+                    "accept": "application/json", 
+                    "accept-language": "en-US,en;q=0.9,fr;q=0.8", 
+                    "authorization": window.sessionStorage.getItem("feathers-jwt"), 
+                    "content-type": "application/json", 
+                }, 
+                "referrerPolicy": "same-origin", 
+                "method": "GET", 
+                "mode": "cors", 
+                "credentials": "include"
+            });
+        } else {
+            output(`Pulling up to 2000 transactions from Shakepay API. Since ${sinceUTC}`)
+            var transactionsResponse = await fetch("https://api.shakepay.com/transactions/history?limit=2000&currency=CAD&since="+sinceUTC, { 
+                "headers": { 
+                    "accept": "application/json", 
+                    "accept-language": "en-US,en;q=0.9,fr;q=0.8", 
+                    "authorization": window.sessionStorage.getItem("feathers-jwt"), 
+                    "content-type": "application/json", 
+                }, 
+                "referrerPolicy": "same-origin", 
+                "method": "GET", 
+                "mode": "cors", 
+                "credentials": "include"
+            });
+        }
+        
+        var transactions = await transactionsResponse.json();
         if (transactions.length == 0) {
             output("No more transactions to process");
             pullMore = false;
@@ -256,7 +284,6 @@ var refreshTransactions = async () => {
 
         output("Processing "+transactions.length+" transactions...")
 
-        var foundTransctions = 0;
         for (var i = 0; i < transactions.length; i++) {
             var t = transactions[i];
 
@@ -271,16 +298,20 @@ var refreshTransactions = async () => {
                 break;
             }
 
-            if(typeof transactionCatalog[t.transactionId] !== 'undefined') {
-                foundTransctions++;
-            } 
+            beforeUTC = t.createdAt;
 
             parseTransaction(t);
         }
 
-        if(foundTransctions > 10) {
+        if(transactions.length < 2000) {
             output(Object.keys(transactionCatalog).length+" transactions loaded.");
             pullMore = false;
+        }
+
+        if(!initialLoad) {
+            
+            if(page>2)
+                break;
         }
         page++;
     }
@@ -297,6 +328,8 @@ var refreshTransactions = async () => {
         newTransactionCatalog[items[nwt][0]] = transactionCatalog[items[nwt][0]];
     }
     transactionCatalog = newTransactionCatalog;
+
+    sinceUTC = transactionCatalog[Object.keys(transactionCatalog)[0]].createdAt
 
     updateInProgress = false;
 };
