@@ -22,4 +22,4 @@ const refreshAuthToken = async () => {
   window.sessionStorage.setItem("feathers-jwt", Auth.accessToken);
 };
 
-setInterval(function () { refreshAuthToken() }, 300000);
+setInterval(function () { refreshAuthToken() }, 600000);
