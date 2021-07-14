@@ -237,14 +237,11 @@ var refreshTransactions = async () => {
     updateInProgress = true;
 
     let pullMore = true;
-    let page = 1;
 
     initialLoad = Object.keys(transactionCatalog).length==0;
 
     // Clear the console window of all Shakepay warnings and errors. There are quite a few ...
     while (pullMore === true) {
-        
-
         if(initialLoad) {
             output(`Pulling up to 2000 transactions from Shakepay API. Before ${beforeUTC}`)
             var transactionsResponse = await fetch("https://api.shakepay.com/transactions/history?limit=2000&currency=CAD&before="+beforeUTC, { 
@@ -307,13 +304,6 @@ var refreshTransactions = async () => {
             output(Object.keys(transactionCatalog).length+" transactions loaded.");
             pullMore = false;
         }
-
-        if(!initialLoad) {
-            
-            if(page>2)
-                break;
-        }
-        page++;
     }
 
     var items = Object.keys(transactionCatalog).map(function(key) {
