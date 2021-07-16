@@ -273,7 +273,7 @@ var refreshTransactions = async () => {
         }
         
         var transactions = await transactionsResponse.json();
-        if (transactions.length == 0) {
+        if (transactions.length <= 1) {
             output("No more transactions to process");
             pullMore = false;
             break;
@@ -298,11 +298,6 @@ var refreshTransactions = async () => {
             beforeUTC = t.createdAt;
 
             parseTransaction(t);
-        }
-
-        if(transactions.length < 2000) {
-            output(Object.keys(transactionCatalog).length+" transactions loaded.");
-            pullMore = false;
         }
     }
 
