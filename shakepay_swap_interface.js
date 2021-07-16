@@ -273,11 +273,6 @@ var refreshTransactions = async () => {
         }
         
         var transactions = await transactionsResponse.json();
-        if (transactions.length <= 1) {
-            output("No more transactions to process");
-            pullMore = false;
-            break;
-        }
 
         output("Processing "+transactions.length+" transactions...")
 
@@ -299,6 +294,13 @@ var refreshTransactions = async () => {
 
             parseTransaction(t);
         }
+
+        if (transactions.length <= 10) {
+            output("No more transactions to process");
+            pullMore = false;
+            break;
+        }
+
     }
 
     var items = Object.keys(transactionCatalog).map(function(key) {
