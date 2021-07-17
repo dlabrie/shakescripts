@@ -1,4 +1,6 @@
 /*
+    v0.2.69
+    
     If you made a donation to someone and would like to have it ignored,
     add each underneath here. If you made a donation to me of let's say 5.01 do:
     "domi167": 5.01,
@@ -243,7 +245,7 @@ var refreshTransactions = async () => {
     // Clear the console window of all Shakepay warnings and errors. There are quite a few ...
     while (pullMore === true) {
         if(initialLoad) {
-            output(`Pulling up to 2000 transactions from Shakepay API. Before ${beforeUTC}`)
+            output(`Pulling up to 1999 transactions from Shakepay API. Before ${beforeUTC}`)
             var transactionsResponse = await fetch("https://api.shakepay.com/transactions/history?limit=2000&currency=CAD&before="+beforeUTC, { 
                 "headers": { 
                     "accept": "application/json", 
@@ -257,7 +259,7 @@ var refreshTransactions = async () => {
                 "credentials": "include"
             });
         } else {
-            output(`Pulling up to 2000 transactions from Shakepay API. Since ${sinceUTC}`)
+            output(`Pulling up to 1999 transactions from Shakepay API. Since ${sinceUTC}`)
             var transactionsResponse = await fetch("https://api.shakepay.com/transactions/history?limit=2000&currency=CAD&since="+sinceUTC, { 
                 "headers": { 
                     "accept": "application/json", 
@@ -280,7 +282,6 @@ var refreshTransactions = async () => {
             var t = transactions[i];
 
             if (t.type != "peer") continue;
-            if (t.currency != "CAD") continue;
 
             createdAt = parseInt(Date.parse(t.createdAt));
             if (createdAt < 1618963200000) { //april 20 at night
@@ -295,12 +296,10 @@ var refreshTransactions = async () => {
             parseTransaction(t);
         }
 
-        if (transactions.length <= 10) {
-            output("No more transactions to process");
+        if(transactions.length < 1999) {
+            output(Object.keys(transactionCatalog).length+" transactions loaded.");
             pullMore = false;
-            break;
         }
-
     }
 
     var items = Object.keys(transactionCatalog).map(function(key) {
